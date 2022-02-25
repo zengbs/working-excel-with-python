@@ -1,3 +1,5 @@
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 import openpyxl as pyxl
 import numpy as np
 
@@ -13,11 +15,11 @@ def readCoulmn( sheet, col_idx, row_min, row_max ):
     return array1D
 
 
+############################################
+### Reading
+############################################
 ExcelFile = "uniform-distribution.xlsx"
-
 wb = pyxl.load_workbook(ExcelFile, data_only=True)
-
-
 sheet = wb.active
 
 col_max  = sheet.max_column
@@ -30,6 +32,9 @@ UniDist1 = readCoulmn(sheet, 1, 2, row_max)
 UniDist2 = readCoulmn(sheet, 2, 2, row_max)
 
 
+############################################
+### Transformation
+############################################
 # We use Box-Muller transformation to obtain two Gaussians from two uniform distribution
 # --> https://en.wikipedia.org/wiki/Normal_distribution#Generating_values_from_normal_distribution
 # --> https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
@@ -37,12 +42,9 @@ NorDist1 = np.sqrt(-2*np.log(UniDist1))*np.cos(2*np.pi*UniDist2)
 NorDist2 = np.sqrt(-2*np.log(UniDist1))*np.sin(2*np.pi*UniDist2)
 
 
-
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-
-
-
+############################################
+### Plotting
+############################################
 x = np.arange(2, row_max+1, 1)
 
 plt.scatter(x, NorDist1, s=20, c="g", marker=r'$\clubsuit$', label="NorDist1")
